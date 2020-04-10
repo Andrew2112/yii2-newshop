@@ -3449,6 +3449,9 @@ input.checkbox:checked:after {
     border: none;
     padding-left: 20px;
 }
+.top_brand_left {
+    margin-bottom: 40px;
+}
 /*-----start-responsive-design------*/
 @media (max-width: 1680px) {
     .snipcart-details {
