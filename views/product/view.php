@@ -75,6 +75,7 @@ use yii\helpers\Url;
 <div class="w3ls_w3l_banner_nav_right_grid w3ls_w3l_banner_nav_right_grid_popular">
     <div class="container">
         <h3>Popular Brands Categories</h3>
+        <?php if (!empty($related)): ?>
         <div class="w3ls_w3l_banner_nav_right_grid1">
 
             <?php foreach ($related as $value) : ?>
@@ -122,7 +123,9 @@ use yii\helpers\Url;
 
             <div class="clearfix"> </div>
         </div>
-
+        <?php else: ?>
+        <h5>Здесь будут похожие товары</h5>
+        <?php endif; ?>
     </div>
 </div>
 <!-- //brands -->
