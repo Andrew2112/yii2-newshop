@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Июл 16 2020 г., 12:35
+-- Время создания: Сен 07 2020 г., 14:30
 -- Версия сервера: 5.6.43
 -- Версия PHP: 7.0.32
 
@@ -285,6 +285,31 @@ INSERT INTO `related_product` (`product_id`, `related_id`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Структура таблицы `reviews`
+--
+
+CREATE TABLE `reviews` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `product_id` int(10) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `email` varchar(30) NOT NULL,
+  `post` text NOT NULL,
+  `created_at` datetime NOT NULL,
+  `rating` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `reviews`
+--
+
+INSERT INTO `reviews` (`id`, `product_id`, `username`, `email`, `post`, `created_at`, `rating`) VALUES
+(1, 1, 'Peter', 'taf_397@yahoo.com', 'Lorem ipsum dolor', '2020-09-07 13:00:55', 1.5),
+(2, 1, 'Andrew', 'linnike@list.ru', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Autem, distinctio dolorem harum necessitatibus sed unde.', '2020-09-07 13:02:04', 3),
+(3, 1, 'Andrew', 'taf_397@yahoo.com', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Autem, distinctio dolorem harum necessitatibus sed unde.', '2020-09-07 13:04:24', 3);
+
+-- --------------------------------------------------------
+
+--
 -- Структура таблицы `user`
 --
 
@@ -301,7 +326,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `username`, `fio`, `password`, `auth_key`) VALUES
-(1, 'admin', 'Иван Петров', '$2y$13$oO04a1TdbWuwm7PQp.uDMOwop58M24T40NDIjWqr2XoOMscbPScZO', 'CYFY-KaOcL3Eqhx9p5FoYzQLyIwKD_4l');
+(1, 'admin', 'Иван Петров', '$2y$13$oO04a1TdbWuwm7PQp.uDMOwop58M24T40NDIjWqr2XoOMscbPScZO', 'PKkcO402U8QZJVF23uqQVPeFbZTgZcNa');
 
 --
 -- Индексы сохранённых таблиц
@@ -335,6 +360,12 @@ ALTER TABLE `order_product`
 -- Индексы таблицы `product`
 --
 ALTER TABLE `product`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `reviews`
+--
+ALTER TABLE `reviews`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -376,6 +407,12 @@ ALTER TABLE `order_product`
 --
 ALTER TABLE `product`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+
+--
+-- AUTO_INCREMENT для таблицы `reviews`
+--
+ALTER TABLE `reviews`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT для таблицы `user`
