@@ -3452,6 +3452,15 @@ input.checkbox:checked:after {
 .top_brand_left {
     margin-bottom: 40px;
 }
+
+.modal-post li{
+    list-style: none;
+    display: inline;
+    margin-right: 15px;
+}
+.modal-post li i{
+    margin-right: 5px;
+}
 /*-----start-responsive-design------*/
 @media (max-width: 1680px) {
     .snipcart-details {

@@ -30,5 +30,9 @@ class Product extends ActiveRecord
             ->via('related');
 
     }
+    public function getProduct()
+    {
+        return $this->hasMany(Reviews::class, [ 'product_id'=>'id'] );
+    }
 
 }
