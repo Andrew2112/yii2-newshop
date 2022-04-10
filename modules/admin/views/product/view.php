@@ -46,11 +46,15 @@ $this->params['breadcrumbs'][] = $this->title;
                             //'img',
                             [
                                 'attribute' => 'img',
-                                'value' =>"/{$model->img}" ,
-                                'format' => ['image', ['width'=>100]],
+                                'value' => "/{$model->img}",
+                                'format' => ['image', ['width' => 100]],
                             ],
                             'is_offer',
                             'gift',
+                            [
+                                'attribute' => 'visible',
+                                'value' => $model->visible ? 'Да' : 'Нет',
+                            ]
                         ],
                     ]) ?>
 

@@ -41,6 +41,7 @@ class Category extends \yii\db\ActiveRecord
             [['title', 'img'], 'required'],
             [['title', 'description', 'keywords', 'img'], 'string', 'max' => 255],
             [['file'], 'image'],
+            [['visible'], 'safe'],
             [['img'], 'default', 'value' => 'images/no-image.png'],
         ];
     }
@@ -58,6 +59,7 @@ class Category extends \yii\db\ActiveRecord
             'keywords' => 'Ключевые слова',
             'file'=>'Фото категории',
             'img' => 'Фото категории',
+            'visible'=>'Показывать'
         ];
     }
     public function beforeSave($insert)

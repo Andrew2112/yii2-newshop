@@ -37,6 +37,7 @@ use yii\widgets\ActiveForm;
     <?php echo $form->field($model, 'file')->widget(FileInput::class, [
         'options' => ['accept' => 'image/*'],
     ]); ?>
+    <?php echo $form->field($model, 'visible')->checkbox()?>
     <div class="form-group">
         <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
     </div>

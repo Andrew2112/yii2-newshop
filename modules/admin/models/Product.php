@@ -49,6 +49,7 @@ class Product extends \yii\db\ActiveRecord
 //            [['category_id', 'category_product_id', 'is_offer', 'gift'], 'integer'],
             [['category_id', 'is_offer', 'gift'], 'integer'],
             [['content'], 'string'],
+            [['visible'], 'safe'],
             [['price', 'old_price'], 'number'],
             [['price', 'old_price'], 'default', 'value' => 0],
             [['img'], 'default', 'value' => 'images/no-image.png'],
@@ -77,6 +78,7 @@ class Product extends \yii\db\ActiveRecord
             'file' => 'Фото',
             'is_offer' => 'Акция',
             'gift' => 'Подарок',
+            'visible' => 'Показывать',
         ];
     }
 

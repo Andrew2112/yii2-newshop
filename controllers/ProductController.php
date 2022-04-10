@@ -15,7 +15,8 @@ class ProductController extends AppController
 {
     public function actionView($id)
     {
-        $product = Product::findOne($id);
+        //$product = Product::findOne($id);
+        $product = Product::find()->andWhere(['visible'=>1])->andWhere(['=', 'id', $id])->one();
         $related = $product->items;
 
         if (empty($product)) {

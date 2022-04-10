@@ -13,7 +13,9 @@ class CategoryController extends AppController
 {
     public function actionView($id)
     {
-        $category = Category::findOne($id);
+        //$category = Category::findOne($id);
+        $category = Category::find()->where(['visible'=>1])->andWhere(['id'=>$id])->one();
+
         if (empty($category)) {
             throw new NotFoundHttpException('Категории не найдено');
         }
@@ -22,7 +24,7 @@ class CategoryController extends AppController
 
         $category_product = CategoryProduct::find()->where(['category_id' => $id])->all();
 
-        $query = Product::find()->where(['category_id' => $id]);
+        $query = Product::find()->where(['category_id' => $id])->andWhere(['visible'=>1]);
         $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => 4, 'forcePageParam' => false, 'pageSizeParam' => false]);
         $products = $query->offset($pages->offset)
             ->limit($pages->limit)

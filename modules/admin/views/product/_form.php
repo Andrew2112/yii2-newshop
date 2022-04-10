@@ -66,7 +66,7 @@ mihaildev\elfinder\Assets::noConflict($this);
     <?= $form->field($model, 'is_offer')->dropDownList(['Нет', 'Да']) ?>
 
     <?= $form->field($model, 'gift')->dropDownList(['Нет', 'Да']) ?>
-
+    <?php echo $form->field($model, 'visible')->checkbox()?>
     <div class="form-group">
         <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
     </div>
