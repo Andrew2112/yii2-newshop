@@ -36,6 +36,7 @@ class AppAsset extends AssetBundle
         'js/okzoom.js',
         "js/jquery.flexslider.js",
         "js/main.js",
+        "js/jquery.wmuSlider.js",
     ];
     public $depends = [
         'yii\web\YiiAsset',

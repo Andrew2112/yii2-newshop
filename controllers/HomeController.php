@@ -13,4 +13,8 @@ class HomeController extends AppController
         $offer=Product::find()->where(['is_offer'=>1])->limit(4)->all();
         return $this->render('index', compact('offer'));
     }
+    public function actionAbout(){
+
+        return $this->render('about');
+    }
 }
