@@ -139,7 +139,7 @@
                     </article>
                 </div>
             </div>
-          
+
             <script>
                 window.addEventListener('load', function () {
                     $('.example1').wmuSlider();
