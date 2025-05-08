@@ -40,7 +40,7 @@ use yii\widgets\Pjax;
                 <div class="rating1">
 
 
-                    <p><?= $reviews->post; ?></p>
+                    <p><?//= $reviews->post; ?></p>
                     <?= StarRating::widget([
                         'name' => 'rating_21',
                         'value' => $rating,

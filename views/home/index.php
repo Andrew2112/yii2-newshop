@@ -107,7 +107,7 @@ if (!empty($offer)): ?>
                                                     </span></h4>
                                             </div>
                                             <div class="snipcart-details top_brand_home_details">
-                                                <a href="<?=\yii\helpers\Url::to(['cart/add', 'id'=>$offer->id])?>" type="submit"  class="button add-to-cart" data-id="<?=$offer->id?>">Add to cart</a>
+                                                <a href="<?=\yii\helpers\Url::to(['cart/add', 'id'=>$value->id])?>" type="submit"  class="button add-to-cart" data-id="<?=$value->id?>">Add to cart</a>
 
                                             </div>
                                         </div>

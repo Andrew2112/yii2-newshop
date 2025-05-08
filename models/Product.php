@@ -14,9 +14,13 @@ class Product extends ActiveRecord
         return 'product';
     }
 
-    public function getCategory()
+   /* public function getCategory()
     {
         return $this->hasMany(Product::class, ['id' => 'category_id']);
+    }*/
+    public function getCategory()
+    {
+        return $this->hasOne(Category::class, ['id' => 'category_id']);
     }
 
     public function getRelated()
