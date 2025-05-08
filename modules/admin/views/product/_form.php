@@ -62,6 +62,11 @@ mihaildev\elfinder\Assets::noConflict($this);
 
     <?php echo $form->field($model, 'file')->widget(FileInput::class, [
         'options' => ['accept' => 'image/*'],
+        'pluginOptions' => [
+            'showCaption' => false,
+            'showRemove' => true,
+            'showUpload' => false
+        ]
     ]); ?>
     <?= $form->field($model, 'is_offer')->dropDownList(['Нет', 'Да']) ?>
 

@@ -11,28 +11,33 @@ use yii\web\Request;
 
 class CategoryController extends AppController
 {
-    public function actionView($id)
+    public function actionView($alias)
     {
-        //$category = Category::findOne($id);
-        $category = Category::find()->where(['visible'=>1])->andWhere(['id'=>$id])->one();
+        $category = Category::find()->where(['visible' => 1, 'alias' => $alias])->one();
 
         if (empty($category)) {
-            throw new NotFoundHttpException('Категории не найдено');
+            throw new NotFoundHttpException('Категория не найдена');
         }
 
         $this->setMeta("{$category->title}::" . \Yii::$app->name, $category->keywords, $category->description);
 
-        $category_product = CategoryProduct::find()->where(['category_id' => $id])->all();
+        // Используем id из найденной категории
+        $category_product = CategoryProduct::find()->where(['category_id' => $category->id])->all();
 
-        $query = Product::find()->where(['category_id' => $id])->andWhere(['visible'=>1]);
-        $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => 4, 'forcePageParam' => false, 'pageSizeParam' => false]);
+        $query = Product::find()->where(['category_id' => $category->id, 'visible' => 1]);
+        $pages = new Pagination([
+            'totalCount' => $query->count(),
+            'pageSize' => 4,
+            'forcePageParam' => false,
+            'pageSizeParam' => false
+        ]);
         $products = $query->offset($pages->offset)
             ->limit($pages->limit)
             ->all();
 
-
         return $this->render('view', compact('category', 'category_product', 'products', 'pages'));
     }
+
 
     public function actionSearch()
     {

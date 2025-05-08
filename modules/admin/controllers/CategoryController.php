@@ -10,6 +10,7 @@ use app\modules\admin\controllers\AppAdminController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
+
 /**
  * CategoryController implements the CRUD actions for Category model.
  */
@@ -67,12 +68,24 @@ class CategoryController extends AppAdminController
     {
         $model = new Category();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+     /*   if ($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->session->setFlash('success', 'Изменения сохранены');
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('create', [
+            'model' => $model,
+        ]);*/
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', 'Изменения сохранены');
+                return $this->redirect(['view', 'id' => $model->id]);
+            } else {
+                \Yii::error($model->errors, 'app');
+                var_dump($model->errors); exit;
+            }
+        }
+       return $this->render('create', [
             'model' => $model,
         ]);
     }
@@ -112,8 +125,18 @@ class CategoryController extends AppAdminController
         if ($cats || $products){
             Yii::$app->session->setFlash('error', 'Удаление невозможно, есть дочерние категории или товары');
         }else{
-            $this->findModel($id)->delete();
-            Yii::$app->session->setFlash('error', "Категория удалена");
+            $model = $this->findModel($id);
+
+            // Удаление изображения
+            if (!empty($model->img)) {
+                $imagePath = Yii::getAlias('@webroot/' . $model->img);
+                if (file_exists($imagePath)) {
+                    @unlink($imagePath); // удаление файла
+                }
+            }
+
+            $model->delete();
+            Yii::$app->session->setFlash('success', 'Категория удалена');
         }
 
         return $this->redirect(['index']);

@@ -85,11 +85,17 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'enableStrictParsing' => false,
-            'rules' => [
+           /* 'rules' => [
                 'category/<id:\d+>/page/<page:\d+>' => 'category/view',
                 'category/<id:\d+>' => 'category/view',
                 'product/<id:\d+>' => 'product/view',
 //                'hotoffers/<id:\d+>' => 'hotoffers/offers',
+                'search' => 'category/search',
+            ],*/
+            'rules' => [
+                'category/<alias:[\w\-]+>/page/<page:\d+>' => 'category/view',
+                'category/<alias:[\w\-]+>' => 'category/view',
+                'product/<alias:[\w\-]+>' => 'product/view',
                 'search' => 'category/search',
             ],
         ],

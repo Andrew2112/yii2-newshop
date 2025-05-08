@@ -97,7 +97,7 @@ use yii\helpers\Html;
                                     <figure>
                                         <div class="snipcart-item block">
                                             <div class="snipcart-thumb">
-                                                <a href="<?= \yii\helpers\Url::to(['product/view', 'id' => $product->id]) ?>">
+                                                <a href="<?= \yii\helpers\Url::to(['product/view', 'alias' => $product->alias]) ?>">
 
                                                     <?= Html::img("@web/{$product->img}", ['alt' => $product->title, 'class' => "img-responsive"]) ?></a>
 

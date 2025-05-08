@@ -1,5 +1,5 @@
 <li <?php if (isset($category['children'])) echo 'class="dropdown mega-dropdown"' ?>>
-    <a href="<?= \yii\helpers\Url::to(['category/view', 'id' => $category['id']]) ?>" <?php if (isset($category['children'])) echo 'class="dropdown-toggle" data-toggle="dropdown"' ?>>
+    <a href="<?= \yii\helpers\Url::to(['category/view', 'alias' => $category['alias']]) ?>" <?php if (isset($category['children'])) echo 'class="dropdown-toggle" data-toggle="dropdown"' ?>>
         <?= $category['title']; ?>
         <?php if (isset($category['children'])) echo '<span class="caret"></span>' ?>
     </a>

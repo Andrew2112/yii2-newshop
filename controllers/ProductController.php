@@ -13,49 +13,56 @@ use yii\web\NotFoundHttpException;
 
 class ProductController extends AppController
 {
-    public function actionView($id)
+    public function actionView($alias)
     {
-        //$product = Product::findOne($id);
-        $product = Product::find()->andWhere(['visible'=>1])->andWhere(['=', 'id', $id])->one();
-        $related = $product->items;
+        $product = Product::find()
+            ->where(['visible' => 1, 'alias' => $alias])
+            ->one();
 
         if (empty($product)) {
             throw new NotFoundHttpException('Такого продукта нет...');
         }
-        $reviews = Reviews::find()->where('product_id' == $id)->all();
+
+        $related = $product->items;
+
+        // Используем $product->id, так как $id у нас теперь нет
+        $productId = $product->id;
+
         $qty = $product->getProduct()->count();
 
-        if ($qty){
+        if ($qty) {
             $rating = round($product->getProduct()->sum('rating') / $qty, 1);
+        } else {
+            $rating = '';
         }
 
-        $query = Reviews::find()->where(['product_id' => $id])->orderBy(['id' => SORT_DESC]);
-        $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => 3, 'forcePageParam' => false, 'pageSizeParam' => false]);
+        $query = Reviews::find()->where(['product_id' => $productId])->orderBy(['id' => SORT_DESC]);
+        $pages = new Pagination([
+            'totalCount' => $query->count(),
+            'pageSize' => 3,
+            'forcePageParam' => false,
+            'pageSizeParam' => false
+        ]);
         $reviews = $query->offset($pages->offset)
             ->limit($pages->limit)
             ->all();
-        $model=new Reviews;
-        $model->product_id = Yii::$app->getRequest()->get('id');
-        if ($model->load(\Yii::$app->request->post()) && $model->save()) {
 
-            if (\Yii::$app->request->isPjax) {
+        $model = new Reviews;
+        $model->product_id = $productId;
 
-                \Yii::$app->session->setFlash('success', 'Спасибо за комментарий');
-
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            if (Yii::$app->request->isPjax) {
+                Yii::$app->session->setFlash('success', 'Спасибо за комментарий');
                 $model = new Reviews;
             } else {
-                \Yii::$app->session->setFlash('success', 'Данные приняты');
+                Yii::$app->session->setFlash('success', 'Данные приняты');
                 return $this->refresh();
-
             }
-
-            return $this->refresh();
         }
 
+        $this->setMeta("{$product->title}::" . Yii::$app->name, $product->keywords, $product->description);
 
-
-
-        $this->setMeta("{$product->title}::" . \Yii::$app->name, $product->keywords, $product->description);
-        return $this->render('view', compact('product','related', 'model', 'qty', 'pages', 'rating', 'reviews'));
+        return $this->render('view', compact('product', 'related', 'model', 'qty', 'pages', 'rating', 'reviews'));
     }
+
 }

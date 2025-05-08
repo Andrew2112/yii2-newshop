@@ -21,8 +21,8 @@ class AdminAsset extends AssetBundle
     public $js = [
         'adminlte/bower_components/bootstrap/dist/js/bootstrap.min.js',
         'adminlte/dist/js/adminlte.min.js',
-        '//oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js',
-        '//oss.maxcdn.com/respond/1.4.2/respond.min.js',
+        //'//oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js',
+        //'//oss.maxcdn.com/respond/1.4.2/respond.min.js',
         'js/admin.js',
     ];
     public $depends = [
