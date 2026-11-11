@@ -38,6 +38,7 @@ class Subscribe extends \yii\db\ActiveRecord
             [['email'], 'email'],
             [['email'], 'string', 'max' => 255],
             [['email'], 'unique', 'message' => 'Этот e-mail уже подписан на рассылку.'],
+            [['active'], 'default', 'value' => self::STATUS_ACTIVE],
             [['active'], 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE]],
         ];
     }
@@ -56,7 +57,24 @@ class Subscribe extends \yii\db\ActiveRecord
         if (empty($this->token)) {
             $this->token = Yii::$app->security->generateRandomString(32);
         }
+        // Дата отписки следует за статусом (в т.ч. при смене статуса из админки)
+        if ($insert || $this->isAttributeChanged('active', false)) {
+            $this->unsubscribed_at = (int)$this->active === self::STATUS_INACTIVE
+                ? ($this->unsubscribed_at ?: date('Y-m-d H:i:s'))
+                : null;
+        }
         return true;
+    }
+
+    /**
+     * Варианты статуса для фильтров и выпадающих списков.
+     */
+    public static function statusList(): array
+    {
+        return [
+            self::STATUS_ACTIVE => 'Подписан',
+            self::STATUS_INACTIVE => 'Отписан',
+        ];
     }
 
     /**
@@ -75,7 +93,6 @@ class Subscribe extends \yii\db\ActiveRecord
 
         $model->email = $email;
         $model->active = self::STATUS_ACTIVE;
-        $model->unsubscribed_at = null;
         $model->save();
 
         return $model;
@@ -90,7 +107,6 @@ class Subscribe extends \yii\db\ActiveRecord
             return true;
         }
         $this->active = self::STATUS_INACTIVE;
-        $this->unsubscribed_at = date('Y-m-d H:i:s');
         return $this->save(false, ['active', 'unsubscribed_at']);
     }
 

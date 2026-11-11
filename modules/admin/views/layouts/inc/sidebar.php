@@ -1,3 +1,50 @@
+<?php
+
+/** @var yii\web\View $this */
+
+use yii\helpers\Html;
+use yii\widgets\Menu;
+
+$controllerId = Yii::$app->controller->id;
+
+/**
+ * Приводит пункты из config/menu.php к формату yii\widgets\Menu с разметкой AdminLTE.
+ */
+$prepare = function (array $config) use ($controllerId) {
+    $items = [];
+    foreach ($config as $item) {
+        if (isset($item['header'])) {
+            $items[] = ['label' => $item['header'], 'options' => ['class' => 'header']];
+            continue;
+        }
+
+        $icon = isset($item['icon']) ? '<i class="fa fa-' . Html::encode($item['icon']) . '"></i> ' : '';
+        $label = $icon . '<span>' . Html::encode($item['label']) . '</span>';
+
+        $menuItem = [
+            'label' => $label,
+            'encode' => false,
+            'visible' => $item['visible'] ?? true,
+        ];
+
+        if (!empty($item['items'])) {
+            $menuItem['url'] = '#';
+            $menuItem['options'] = ['class' => 'treeview'];
+            $menuItem['template'] = '<a href="{url}">{label}<span class="pull-right-container">'
+                . '<i class="fa fa-angle-left pull-right"></i></span></a>';
+            $menuItem['items'] = $item['items'];
+            if (isset($item['controller'])) {
+                $menuItem['active'] = $item['controller'] === $controllerId;
+            }
+        } else {
+            $menuItem['url'] = $item['url'];
+        }
+
+        $items[] = $menuItem;
+    }
+    return $items;
+};
+?>
 <aside class="main-sidebar">
 
     <!-- sidebar: style can be found in sidebar.less -->
@@ -9,56 +56,19 @@
                 <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
             </div>
             <div class="pull-left info">
-                <p><?=Yii::$app->user->identity->fio ; ?></p>
+                <p><?= Html::encode(Yii::$app->user->identity->fio) ?></p>
                 <!-- Status -->
                 <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
             </div>
         </div>
 
-
-
         <!-- Sidebar Menu -->
-        <ul class="sidebar-menu" data-widget="tree">
-            <li class="header">HEADER</li>
-            <!-- Optionally, you can add icons to the links -->
-            <li class="active"><a href="<?=\yii\helpers\Url::to(['main/index'])?>"><i class="fa fa-bar-chart"></i> <span>Статистика магазина</span></a></li>
-
-            <li class="treeview">
-                <a href="#"><i class="fa fa-cubes"></i> <span>Категории</span>
-                    <span class="pull-right-container">
-                <i class="fa fa-angle-left pull-right"></i>
-              </span>
-                </a>
-                <ul class="treeview-menu">
-                    <li><a href="<?=\yii\helpers\Url::to(['category/index'])?>">Список Категорий</a></li>
-                    <li><a href="<?=\yii\helpers\Url::to(['category/create'])?>">Добавить категорию</a></li>
-                </ul>
-            </li>
-            <li class="treeview">
-                <a href="#"><i class="fa fa-shopping-cart"></i> <span>Заказы</span>
-                    <span class="pull-right-container">
-                <i class="fa fa-angle-left pull-right"></i>
-              </span>
-                </a>
-                <ul class="treeview-menu">
-                    <li><a href="<?=\yii\helpers\Url::to(['order/index'])?>">Список заказов</a></li>
-                    <li><a href="<?=\yii\helpers\Url::to(['order/create'])?>">Добавить заказ</a></li>
-                </ul>
-            </li>
-
-            <li class="treeview">
-                <a href="#"><i class="fa fa-cutlery"></i> <span>Товары</span>
-                    <span class="pull-right-container">
-                <i class="fa fa-angle-left pull-right"></i>
-              </span>
-                </a>
-                <ul class="treeview-menu">
-                    <li><a href="<?=\yii\helpers\Url::to(['product/index'])?>">Список товаров</a></li>
-                    <li><a href="<?=\yii\helpers\Url::to(['product/create'])?>">Добавить товар</a></li>
-                </ul>
-            </li>
-
-        </ul>
+        <?= Menu::widget([
+            'options' => ['class' => 'sidebar-menu', 'data-widget' => 'tree'],
+            'items' => $prepare(require Yii::getAlias('@app/modules/admin/config/menu.php')),
+            'submenuTemplate' => "\n<ul class=\"treeview-menu\">\n{items}\n</ul>\n",
+            'activateParents' => true,
+        ]) ?>
         <!-- /.sidebar-menu -->
     </section>
     <!-- /.sidebar -->
