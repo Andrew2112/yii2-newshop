@@ -47,8 +47,12 @@ use yii\widgets\ActiveForm;
                             foreach ($session['cart'] as $id => $item): ?>
                                 <tr class="rem1">
                                     <td class="invert"><?= $i; ?></td>
-                                    <td class="invert-image"><a
-                                                href="<?= \yii\helpers\Url::to(['product/view', 'id' => $id]) ?>"><?= \yii\helpers\Html::img("@web/{$item['img']}", ['alt' => $item['title'], 'height' => 50]); ?></a>
+                                                                        <td class="invert-image"><a
+                                                href="<?= \yii\helpers\Url::to([
+                                                    'product/view',
+                                                    'category' => $item['category_alias'],
+                                                    'alias' => $item['alias'],
+                                                ]) ?>"><?= \yii\helpers\Html::img("@web/{$item['img']}", ['alt' => $item['title'], 'height' => 50]); ?></a>
                                     </td>
                                     <td class="invert">
                                         <div class="quantity">

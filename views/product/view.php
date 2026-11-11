@@ -14,7 +14,7 @@ use yii\widgets\Pjax;
             <li><i class="fa fa-home" aria-hidden="true"></i><a
                         href="<?= Url::home() ?>">Home</a><span>|</span></li>
             <li>
-                <a href="<?= Url::to(['category/view', 'id' => $product->category->id]) ?>"><?= $product->category->title; ?></a>
+                <a href="<?= Url::to(['category/view', 'alias' => $product->category->alias]) ?>"><?= $product->category->title; ?></a>
                 <span>|</span>
             </li>
             <li><?= $product->title; ?></li>
@@ -113,7 +113,11 @@ use yii\widgets\Pjax;
                                     <figure>
                                         <div class="snipcart-item block">
                                             <div class="snipcart-thumb">
-                                                <a href="<?= \yii\helpers\Url::to(['product/view', 'alias' => $value->alias]) ?>">
+                                                <a href="<?= Url::to([
+                                                        'product/view',
+                                                        'category' => $value->category->alias,
+                                                        'alias' => $value->alias,
+                                                    ]) ?>">
 
                                                     <?= Html::img("@web/{$value->img}", ['alt' => $value->title, 'class' => "img-responsive"]) ?></a>
 

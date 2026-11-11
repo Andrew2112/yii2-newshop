@@ -13,7 +13,7 @@ use yii\web\NotFoundHttpException;
 
 class ProductController extends AppController
 {
-    public function actionView($alias)
+        public function actionView($alias, $category = null)
     {
         $product = Product::find()
             ->where(['visible' => 1, 'alias' => $alias])
@@ -21,6 +21,11 @@ class ProductController extends AppController
 
         if (empty($product)) {
             throw new NotFoundHttpException('Такого продукта нет...');
+        }
+
+        // Если в URL указана другая категория — 404 (каноничный URL)
+        if ($category !== null && $product->category && $product->category->alias !== $category) {
+            throw new NotFoundHttpException('Товар не найден в этой категории...');
         }
 
         $related = $product->items;

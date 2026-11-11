@@ -16,11 +16,13 @@ class Cart extends Model
                 $_SESSION['cart'][$product->id]['qty'] += $qty;
 
         } else {
-            $_SESSION['cart'][$product->id] = [
+                        $_SESSION['cart'][$product->id] = [
                 'title' => $product->title,
                 'img' => $product->img,
                 'price' => $product->price,
                 'qty' => $qty,
+                'alias' => $product->alias,
+                'category_alias' => $product->category ? $product->category->alias : null,
             ];
         }
         $_SESSION['cart.qty'] = isset($_SESSION['cart.qty']) ? $_SESSION['cart.qty'] + $qty : $qty;

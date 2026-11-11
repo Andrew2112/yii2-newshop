@@ -2,6 +2,7 @@
 
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
+$smtp = is_file(__DIR__ . '/mailer-local.php') ? require __DIR__ . '/mailer-local.php' : null;
 
 $config = [
     'id' => 'basic',
@@ -56,19 +57,10 @@ $config = [
         ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
-            // send all mails to a file by default. You have to set
-            // 'useFileTransport' to false and configure a transport
-            // for the mailer to send real emails.
-            'useFileTransport' => false,
-            'transport' => [
-                'class' => 'Swift_SmtpTransport',
-                'host' => 'smtp.mail.ru',
-                'username' => 'andrew1971@mail.ru',
-                'password' => 'cHSz5eMS0erfu2vPQp9C',
-                'port' => 465,
-                'encryption' => 'ssl',
-
-            ],
+            // SMTP-доступы берутся из config/mailer-local.php (не в git).
+            // Если файла нет — письма пишутся в runtime/mail.
+            'useFileTransport' => $smtp === null,
+            'transport' => ['class' => 'Swift_SmtpTransport'] + (array)$smtp,
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -93,10 +85,26 @@ $config = [
                 'search' => 'category/search',
             ],*/
             'rules' => [
-                'category/<alias:[\w\-]+>/page/<page:\d+>' => 'category/view',
-                'category/<alias:[\w\-]+>' => 'category/view',
-                'product/<alias:[\w\-]+>' => 'product/view',
                 'search' => 'category/search',
+
+                // Служебные контроллеры — чтобы правило товара их не перехватывало: /cart/add, /site/login ...
+                'cart/<action:[\w\-]+>' => 'cart/<action>',
+                'site/<action:[\w\-]+>' => 'site/<action>',
+                'home/<action:[\w\-]+>' => 'home/<action>',
+                'elfinder/<action:[\w\-]+>' => 'elfinder/<action>',
+
+                // Админка
+                'admin' => 'admin/main/index',
+                'admin/<controller:[\w\-]+>/<action:[\w\-]+>' => 'admin/<controller>/<action>',
+                'admin/<controller:[\w\-]+>' => 'admin/<controller>/index',
+
+                // Товар внутри категории: /<категория>/<товар>
+                '<category:[\w\-]+>/<alias:[\w\-]+>' => 'product/view',
+
+                // Категория с пагинацией, hotoffers и сама категория
+                '<alias:[\w\-]+>/page/<page:\d+>' => 'category/view',
+                'hotoffers' => 'hotoffers/offers',
+                '<alias:[\w\-]+>' => 'category/view',
             ],
         ],
 

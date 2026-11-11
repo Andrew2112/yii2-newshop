@@ -97,7 +97,11 @@ if (!empty($offer)): ?>
                                     <figure>
                                         <div class="snipcart-item block">
                                             <div class="snipcart-thumb">
-                                                <a href="<?=\yii\helpers\Url::to(['product/view', 'alias'=>$value->alias])?>">
+                                                <a href="<?=\yii\helpers\Url::to([
+                                                        'product/view',
+                                                        'category' => $value->category->alias,
+                                                        'alias' => $value->alias,
+                                                    ])?>">
                                                     <?= Html::img("@web/{$value->img}", ['alt' => $value->title]) ?>
                                                 </a>
                                                 <p><?= $value->title; ?></p>
