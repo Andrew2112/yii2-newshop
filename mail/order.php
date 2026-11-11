@@ -1,3 +1,8 @@
+<?php
+/** @var app\models\Order $order */
+/** @var array $cart позиции корзины [id => ['title', 'qty', 'price']] */
+use yii\helpers\Html;
+?>
 <div class="table-responsive">
     <h2>Вами был сделан заказ:</h2>
     <table style="width: 100%; border: 1px solid #ddd; border-collapse: collapse;">
@@ -10,9 +15,9 @@
         </tr>
         </thead>
         <tbody>
-        <?php foreach($session['cart'] as $id => $item):?>
+        <?php foreach($cart as $id => $item):?>
             <tr>
-                <td style="padding: 8px; border: 1px solid #ddd;"><?= $item['title']?></td>
+                <td style="padding: 8px; border: 1px solid #ddd;"><?= Html::encode($item['title']) ?></td>
                 <td style="padding: 8px; border: 1px solid #ddd;"><?= $item['qty']?></td>
                 <td style="padding: 8px; border: 1px solid #ddd;"><?= $item['price']?></td>
                 <td style="padding: 8px; border: 1px solid #ddd;"><?= $item['qty'] * $item['price']?></td>
@@ -20,11 +25,11 @@
         <?php endforeach?>
         <tr>
             <td colspan="3" style="padding: 8px; border: 1px solid #ddd;">Итого: </td>
-            <td style="padding: 8px; border: 1px solid #ddd;"><?= $session['cart.qty']?></td>
+            <td style="padding: 8px; border: 1px solid #ddd;"><?= $order->qty ?></td>
         </tr>
         <tr>
             <td colspan="3" style="padding: 8px; border: 1px solid #ddd;">На сумму: </td>
-            <td style="padding: 8px; border: 1px solid #ddd;"><?= $session['cart.sum'];?></td>
+            <td style="padding: 8px; border: 1px solid #ddd;"><?= $order->total ?></td>
         </tr>
         </tbody>
     </table>

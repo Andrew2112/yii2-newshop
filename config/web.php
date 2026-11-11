@@ -55,12 +55,14 @@ $config = [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        'mailer' => [
-            'class' => 'yii\swiftmailer\Mailer',
-            // SMTP-доступы берутся из config/mailer-local.php (не в git).
-            // Если файла нет — письма пишутся в runtime/mail.
-            'useFileTransport' => $smtp === null,
-            'transport' => ['class' => 'Swift_SmtpTransport'] + (array)$smtp,
+        // SMTP-доступы берутся из config/mailer-local.php (не в git).
+        // Если файла нет — письма пишутся в runtime/mail.
+        'mailer' => $smtp === null
+            ? ['class' => 'yii\symfonymailer\Mailer', 'useFileTransport' => true]
+            : ['class' => 'yii\symfonymailer\Mailer', 'useFileTransport' => false, 'transport' => $smtp],
+        // Почтовые уведомления: заказы, подписки и т.д. (отправитель и admin email — из params.php)
+        'notifier' => [
+            'class' => 'app\components\Notifier',
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,

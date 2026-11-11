@@ -1,0 +1,11 @@
+<?php
+// Скопируйте в config/mailer-local.php и заполните.
+// Если файла нет — письма пишутся в runtime/mail (useFileTransport).
+
+return [
+    'scheme' => 'smtps', // smtps = SSL на 465 порту; для STARTTLS на 587 — 'smtp'
+    'host' => 'smtp.mail.ru',
+    'username' => '',
+    'password' => '',
+    'port' => 465,
+];
