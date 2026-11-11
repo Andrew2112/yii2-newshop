@@ -10,6 +10,7 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\Subscribe;
 
 class SiteController extends Controller
 {
@@ -34,6 +35,8 @@ class SiteController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'logout' => ['post'],
+                    'subscribe' => ['post'],
+                    'unsubscribe' => ['get', 'post'],
                 ],
             ],
         ];
@@ -133,5 +136,51 @@ class SiteController extends Controller
             $product->visible=1;
             $product->save();
         }*/
+    }
+
+    /**
+     * Подписка на рассылку (AJAX из формы в футере).
+     * Ранее отписавшийся e-mail подписывается снова (active = 1).
+     */
+    public function actionSubscribe()
+    {
+        $model = Subscribe::subscribe(Yii::$app->request->post('email'));
+
+        if ($model->hasErrors()) {
+            return $this->asJson([
+                'success' => false,
+                'message' => $model->getFirstError('email') ?: 'Не удалось оформить подписку. Попробуйте позже.',
+            ]);
+        }
+
+        $sent = Yii::$app->notifier->sendSubscribed($model);
+
+        return $this->asJson([
+            'success' => true,
+            'message' => $sent
+                ? 'Спасибо, что подписались! На вашу почту отправлено уведомление.'
+                : 'Спасибо, что подписались!',
+        ]);
+    }
+
+    /**
+     * Отписка по ссылке из письма.
+     * GET — страница с кнопкой подтверждения (почтовые антивирусы открывают ссылки из писем
+     * и иначе отписывали бы людей сами), POST — собственно отписка.
+     * Запись из БД не удаляется, а помечается active = 0.
+     */
+    public function actionUnsubscribe($token = null)
+    {
+        $model = $token ? Subscribe::findOne(['token' => (string)$token]) : null;
+        $done = false;
+
+        if ($model && Yii::$app->request->isPost) {
+            $done = $model->unsubscribe();
+        }
+
+        return $this->render('unsubscribe', [
+            'model' => $model,
+            'done' => $done,
+        ]);
     }
 }

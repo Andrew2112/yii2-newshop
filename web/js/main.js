@@ -172,6 +172,39 @@ $('#modal-cart .modal-body').on('click', '.del-item', function () {
     })
 });
 /*=======/CART=======*/
+
+/*=======SUBSCRIBE=======*/
+$(document).on('submit', '#subscribe-form', function (e) {
+    e.preventDefault();
+
+    var $form = $(this),
+        $input = $form.find('.subscribe-email'),
+        $error = $form.find('.subscribe-error');
+
+    $error.text('');
+
+    $.ajax({
+        url: $form.attr('action'),
+        type: 'POST',
+        data: $form.serialize(),
+        dataType: 'json',
+        success: function (res) {
+            if (res.success) {
+                $form[0].reset();
+                $('#modal-subscribe .subscribe-modal-text').text(res.message);
+                $('#modal-subscribe').modal('show');
+            } else {
+                $error.text(res.message);
+            }
+        },
+        error: function () {
+            $error.text('Ошибка отправки. Попробуйте позже.');
+        }
+    });
+
+    return false;
+});
+/*=======/SUBSCRIBE=======*/
 /*==change-quantity==*/
 
 $('.value-minus, .value-plus').on('click', function () {

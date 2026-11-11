@@ -3,6 +3,7 @@
 namespace app\components;
 
 use app\models\Order;
+use app\models\Subscribe;
 use Yii;
 use yii\base\Component;
 use yii\di\Instance;
@@ -13,7 +14,7 @@ use yii\mail\MailerInterface;
  *
  * Подключается в config/web.php как компонент `notifier`:
  *     Yii::$app->notifier->sendOrderCreated($order, $cart);
- *     Yii::$app->notifier->send('subscription', ['email' => $email], $email, 'Подписка оформлена');
+ *     Yii::$app->notifier->sendSubscribed($subscribe);
  *
  * Ошибки отправки не выбрасываются наружу, а пишутся в лог —
  * сбой почты не должен ломать основное действие пользователя.
@@ -83,5 +84,13 @@ class Notifier extends Component
     public function sendOrderCreated(Order $order, array $cart): bool
     {
         return $this->send('order', ['order' => $order, 'cart' => $cart], $order->email, 'Заказ на сайте', true);
+    }
+
+    /**
+     * Письмо подписчику об оформлении подписки (со ссылкой на отписку).
+     */
+    public function sendSubscribed(Subscribe $subscribe): bool
+    {
+        return $this->send('subscribe', ['subscribe' => $subscribe], $subscribe->email, 'Спасибо за подписку на ' . Yii::$app->name);
     }
 }

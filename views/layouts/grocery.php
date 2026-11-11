@@ -133,17 +133,52 @@ AppAsset::register($this);
             <div class="w3agile_newsletter_left">
                 <h3>sign up for our newsletter</h3>
             </div>
-            <div class="w3agile_newsletter_right">
-                <form action="#" method="post">
-                    <input type="email" name="Email" value="Email" onfocus="this.value = '';"
-                           onblur="if (this.value == '') {this.value = 'Email';}" required="">
-                    <input type="submit" value="subscribe now">
-                </form>
+                                    <div class="w3agile_newsletter_right">
+                <?php $form = \yii\widgets\ActiveForm::begin([
+                    'id' => 'subscribe-form',
+                    'action' => ['/site/subscribe'],
+                    'options' => ['class' => 'subscribe-form'],
+                    'fieldConfig' => [
+                        'template' => "{input}\n{error}",
+                        'inputOptions' => [
+                            'type' => 'email',
+                            'name' => 'email',
+                            'placeholder' => 'Email',
+                            'class' => 'subscribe-email',
+                            'required' => true,
+                        ],
+                        'errorOptions' => ['class' => 'subscribe-error', 'tag' => 'span'],
+                    ],
+                ]); ?>
+                    <?= $form->field(new \app\models\Subscribe(), 'email')->textInput() ?>
+                    <?= Html::submitInput('subscribe now') ?>
+                <?php \yii\widgets\ActiveForm::end(); ?>
             </div>
             <div class="clearfix"></div>
         </div>
     </div>
     <!-- //newsletter -->
+
+    <!-- Модалка «спасибо за подписку» -->
+    <div class="modal fade" id="modal-subscribe" tabindex="-1" role="dialog" aria-labelledby="modal-subscribe-label">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="modal-subscribe-label">Подписка оформлена</h4>
+                </div>
+                <div class="modal-body">
+                    <p class="subscribe-modal-text"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Отлично</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- footer -->
     <div class="footer">
         <div class="container">
