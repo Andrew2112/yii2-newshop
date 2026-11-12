@@ -93,7 +93,10 @@ $config = [
                 'cart/<action:[\w\-]+>' => 'cart/<action>',
                 'site/<action:[\w\-]+>' => 'site/<action>',
                 'home/<action:[\w\-]+>' => 'home/<action>',
-                'elfinder/<action:[\w\-]+>' => 'elfinder/<action>',
+                                'elfinder/<action:[\w\-]+>' => 'elfinder/<action>',
+
+                // AJAX-подгрузка товаров категории (должно быть ВЫШЕ правила товара)
+                'category/load-more' => 'category/load-more',
 
                 // Админка
                 'admin' => 'admin/main/index',

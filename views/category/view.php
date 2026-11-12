@@ -78,66 +78,57 @@ use yii\helpers\Html;
         <div class="w3ls_w3l_banner_nav_right_grid">
             <h3><?= $category->title; ?></h3>
             <?php if (!empty($category)) : ?>
-            <div class="w3ls_w3l_banner_nav_right_grid1">
-                <?php foreach ($products as $product): ?>
-                    <div class="col-md-3 w3ls_w3l_banner_left">
-                        <div class="hover14 column">
-                            <div class="agile_top_brand_left_grid w3l_agile_top_brand_left_grid">
-                                <div class="agile_top_brand_left_grid_pos">
-                                    <?php if ($product->is_offer): ?>
-                                        <?= Html::img('@web/images/offer.png', ['alt' => 'offer', 'class="img-responsive"']) ?>
-                                    <?php endif; ?>
-                                </div>
-                                <div class="tag">
-                                    <?php if ($product->gift): ?>
-                                        <?= Html::img('@web/images/tag.png', ['alt' => 'Подарок', 'class' => "img-responsive"]) ?>
-                                    <?php endif; ?>
-                                </div>
-                                <div class="agile_top_brand_left_grid1">
-                                    <figure>
-                                        <div class="snipcart-item block">
-                                            <div class="snipcart-thumb">
-                                                <a href="<?= \yii\helpers\Url::to([
-                                                        'product/view',
-                                                        'category' => $product->category->alias,
-                                                        'alias' => $product->alias,
-                                                    ]) ?>">
-
-                                                    <?= Html::img("@web/{$product->img}", ['alt' => $product->title, 'class' => "img-responsive"]) ?></a>
-
-                                                <p><?= $product->title; ?></p>
-                                                <h4>$ <?= $product->price; ?>
-                                                    <span> <?php if ((float)$product->old_price > 0) echo '$' . $product->old_price; ?></span>
-                                                </h4>
-                                            </div>
-
-                                            <div class="snipcart-details">
-                                                <a href="<?=\yii\helpers\Url::to(['cart/add', 'id'=>$product->id])?>" type="submit"  class="button add-to-cart" data-id="<?=$product->id?>">Add to cart</a>
-                                            </div>
-                                        </div>
-                                    </figure>
-                                </div>
-
-                            </div>
-                        </div>
+            <div class="w3ls_w3l_banner_nav_right_grid1" id="posts-container">
+                <?= $this->render('_items', ['products' => $products]) ?>
                     </div>
-
-                <?php endforeach; ?>
 
                 <?php else: ?>
                     <div class="col-md-3 w3ls_w3l_banner_left">
                         <h6>Товары скоро появятся</h6>
                     </div>
                 <?php endif; ?>
-                <div class="col-md-12">
+                <div class="col-md-12 category-pagination">
                     <?= \yii\widgets\LinkPager::widget([
                         'pagination' => $pages,
+                        'options' => ['class' => 'pagination'],
                     ]); ?>
+                    <?php if ($pages->pageCount > 1): ?>
+    <button id="load-more" class="btn btn-primary" data-page="<?= $pages->getPage() + 1 ?>">Показать ещё</button>
+                    <?php endif; ?>
                 </div>
-                <div class="clearfix"></div>
-            </div>
+    <div class="clearfix"></div>
+</div>
         </div>
     </div>
     <div class="clearfix"></div>
 </div>
 <!-- //banner -->
+ <?php
+$url = \yii\helpers\Url::to(['load-more', 'alias' => $category->alias]);
+$totalPages = $pages->pageCount;
+$this->registerJs(<<<JS
+    $('#load-more').on('click', function() {
+        var btn = $(this);
+        var page = parseInt(btn.attr('data-page')) + 1;
+        
+        $.ajax({
+            url: '$url',
+            data: {page: page},
+            type: 'GET',
+            headers: {'X-Requested-With': 'XMLHttpRequest'},
+            success: function(data) {
+                if (data.trim().length > 0) {
+                    $('#posts-container').append(data);
+                    btn.attr('data-page', page);
+                    if (page >= $totalPages) {
+                    btn.hide();
+                }
+                } else {
+                    btn.hide();
+                }
+            }
+        });
+    });
+JS
+);
+?>

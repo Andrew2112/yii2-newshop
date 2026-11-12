@@ -34,8 +34,40 @@ class CategoryController extends AppController
         $products = $query->offset($pages->offset)
             ->limit($pages->limit)
             ->all();
-
         return $this->render('view', compact('category', 'category_product', 'products', 'pages'));
+    }
+
+    /**
+     * Подгрузка товаров для кнопки "Показать ещё" (AJAX).
+     */
+    public function actionLoadMore($alias, $page = 1)
+    {
+        $category = Category::find()->where(['visible' => 1, 'alias' => $alias])->one();
+
+        if (empty($category)) {
+            throw new NotFoundHttpException('Категория не найдена');
+        }
+        $query = Product::find()->where(['category_id' => $category->id, 'visible' => 1]);
+        $pages = new Pagination([
+            'totalCount' => $query->count(),
+            'pageSize' => 4,
+            'forcePageParam' => false,
+            'pageSizeParam' => false
+        ]);
+        // $page приходит 1-based, Pagination работает с 0-based
+        $pages->setPage(max(0, (int)$page - 1));
+        $products = $query->offset($pages->offset)
+            ->limit($pages->limit)
+            ->all();
+
+        if (empty($products)) {
+            return '';
+        }
+
+        return $this->renderAjax('_items', [
+            'products' => $products,
+            'category' => $category,
+        ]);
     }
 
 
