@@ -79,13 +79,13 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'enableStrictParsing' => false,
-           /* 'rules' => [
-                'category/<id:\d+>/page/<page:\d+>' => 'category/view',
-                'category/<id:\d+>' => 'category/view',
-                'product/<id:\d+>' => 'product/view',
-//                'hotoffers/<id:\d+>' => 'hotoffers/offers',
-                'search' => 'category/search',
-            ],*/
+            /* 'rules' => [
+                 'category/<id:\d+>/page/<page:\d+>' => 'category/view',
+                 'category/<id:\d+>' => 'category/view',
+                 'product/<id:\d+>' => 'product/view',
+ //                'hotoffers/<id:\d+>' => 'hotoffers/offers',
+                 'search' => 'category/search',
+             ],*/
             'rules' => [
                 'search' => 'category/search',
 
@@ -93,7 +93,7 @@ $config = [
                 'cart/<action:[\w\-]+>' => 'cart/<action>',
                 'site/<action:[\w\-]+>' => 'site/<action>',
                 'home/<action:[\w\-]+>' => 'home/<action>',
-                                'elfinder/<action:[\w\-]+>' => 'elfinder/<action>',
+                'elfinder/<action:[\w\-]+>' => 'elfinder/<action>',
 
                 // AJAX-подгрузка товаров категории (должно быть ВЫШЕ правила товара)
                 'category/load-more' => 'category/load-more',

@@ -8,7 +8,7 @@ use yii\helpers\Html;
     <div class="container">
         <ul>
             <li><i class="fa fa-home" aria-hidden="true"></i><a
-                        href="<?= \yii\helpers\Url::home() ?>">Home</a><span>|</span></li>
+                    href="<?= \yii\helpers\Url::home() ?>">Home</a><span>|</span></li>
             <li><?= $category->title; ?></li>
         </ul>
     </div>
@@ -77,33 +77,34 @@ use yii\helpers\Html;
 
         <div class="w3ls_w3l_banner_nav_right_grid">
             <h3><?= $category->title; ?></h3>
-            <?php if (!empty($category)) : ?>
-            <div class="w3ls_w3l_banner_nav_right_grid1" id="posts-container">
-                <?= $this->render('_items', ['products' => $products]) ?>
-                    </div>
-
-                <?php else: ?>
-                    <div class="col-md-3 w3ls_w3l_banner_left">
-                        <h6>Товары скоро появятся</h6>
-                    </div>
-                <?php endif; ?>
-                <div class="col-md-12 category-pagination">
-                    <?= \yii\widgets\LinkPager::widget([
-                        'pagination' => $pages,
-                        'options' => ['class' => 'pagination'],
-                    ]); ?>
-                    <?php if ($pages->pageCount > 1): ?>
-    <button id="load-more" class="btn btn-primary" data-page="<?= $pages->getPage() + 1 ?>">Показать ещё</button>
-                    <?php endif; ?>
+            <?php if (!empty($category)): ?>
+                <div class="w3ls_w3l_banner_nav_right_grid1" id="posts-container">
+                    <?= $this->render('_items', ['products' => $products]) ?>
                 </div>
-    <div class="clearfix"></div>
-</div>
+
+            <?php else: ?>
+                <div class="col-md-3 w3ls_w3l_banner_left">
+                    <h6>Товары скоро появятся</h6>
+                </div>
+            <?php endif; ?>
+            <div class="col-md-12 category-pagination">
+                <?= \yii\widgets\LinkPager::widget([
+                    'pagination' => $pages,
+                    'options' => ['class' => 'pagination'],
+                ]); ?>
+                <?php if ($pages->pageCount > 1): ?>
+                    <button id="load-more" class="btn btn-primary" data-page="<?= $pages->getPage() + 1 ?>">Показать
+                        ещё</button>
+                <?php endif; ?>
+            </div>
+            <div class="clearfix"></div>
         </div>
     </div>
-    <div class="clearfix"></div>
+</div>
+<div class="clearfix"></div>
 </div>
 <!-- //banner -->
- <?php
+<?php
 $url = \yii\helpers\Url::to(['load-more', 'alias' => $category->alias]);
 $totalPages = $pages->pageCount;
 $this->registerJs(<<<JS

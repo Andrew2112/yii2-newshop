@@ -55,7 +55,7 @@ class CategoryController extends AppController
             'pageSizeParam' => false
         ]);
         // $page приходит 1-based, Pagination работает с 0-based
-        $pages->setPage(max(0, (int)$page - 1));
+        $pages->setPage(max(0, (int) $page - 1));
         $products = $query->offset($pages->offset)
             ->limit($pages->limit)
             ->all();
@@ -79,7 +79,7 @@ class CategoryController extends AppController
             return $this->render('search');
         }
         $query = Product::find()->where(['like', 'title', $q]);
-        $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => 2, 'forcePageParam'=>false, 'pageSizeParam'=>false]);
+        $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => 2, 'forcePageParam' => false, 'pageSizeParam' => false]);
         $products = $query->offset($pages->offset)
             ->limit($pages->limit)
             ->all();
